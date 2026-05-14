@@ -161,6 +161,20 @@ The goalposts have moved far enough. What matters now is building well.
 
 ---
 
+## Review Questions
+
+1. The "stochastic parrot" critique argues that LLMs do not truly understand — they merely execute sophisticated autocomplete. The chapter counters with evidence of internal world models (e.g., Othello board representations). Does the existence of internal models prove "understanding"? Why or why not? What remains unknown about how these models differ from human reasoning?
+
+2. The Othello experiment found that a model built accurate internal representations of the board without ever being shown one — it deduced the structure from move sequences alone. What does this tell you about your agent's ability to generalize to novel situations within a familiar domain? What are the limits of this capability? When might generalization fail?
+
+3. The chapter states that internal representations capture "what has been written about" a domain, not "the domain itself." Explain this distinction with a concrete example. Then design a test you could run on your agent to determine where its knowledge ends and its confident confabulation begins.
+
+4. Compare mechanistic interpretability (probing internal activations) to traditional black-box testing (examining inputs and outputs). What can each approach tell you? Why is mechanistic interpretability valuable for agent engineering, even if you're not a researcher?
+
+5. The chapter links reasoning understanding to three engineering practices: designing verification, structuring prompts for chain-of-thought, and scoping autonomy. For a specific agent task (e.g., research synthesis, code generation, customer support), explain how understanding the reasoning limitations would change your design decisions in each of these three areas.
+
+---
+
 ## Sources
 
 - Bender, E. M., Gebru, T., McMillan-Major, A., & Shmitchell, S. "On the Dangers of Stochastic Parrots: Can Language Models Be Too Big?" *FAccT '21*, March 2021. <https://dl.acm.org/doi/10.1145/3442188.3445922>

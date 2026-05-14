@@ -163,6 +163,20 @@ By the end, you'll have both a catalog of proven patterns and the judgment to kn
 
 ---
 
+## Review Questions
+
+1. Using the Agentic Spectrum framework, classify each of these systems and justify your answer: (A) A chatbot that selects from three predefined customer service templates based on the input, (B) An email client that learns user preferences and auto-files certain types of messages without user interaction, (C) A code completion tool that suggests the next line as you type. Where on the spectrum would each need to be to be called an "agent"?
+
+2. The chapter contrasts "workflows" (predefined code paths) with "agents" (dynamic decision-making). You are tasked with building a system to process customer refund requests. The system must check eligibility, verify payment records, and either approve or reject. Does this problem call for a workflow or an agent? Defend your choice by explaining what information is and isn't predictable at design time.
+
+3. The Augmented LLM consists of three capabilities: retrieval, tools, and memory. For each capability, describe a concrete failure mode that could occur if the capability is missing or broken. Then explain why each failure mode is specifically a problem for agents (rather than simple chatbots).
+
+4. The chapter presents a history of the AI Effect — how capabilities once considered "intelligent" become dismissed as "mere statistics" once machines achieve them. Why does this matter for agentic engineering? How should this historical pattern influence your trust calibration when deploying an agent?
+
+5. Describe the relationship between the Agent Loop and a traditional programming loop (like a `while` statement). What is conceptually similar? What is fundamentally different? Why does the agent loop require different testing and observability strategies?
+
+---
+
 ## Sources
 
 - Anthropic. "Building Effective Agents." *Anthropic Engineering*, December 2024. <https://www.anthropic.com/engineering/building-effective-agents>. Accessed April 2026.

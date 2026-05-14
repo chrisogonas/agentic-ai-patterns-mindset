@@ -152,6 +152,20 @@ The rest of this book is patterns and implementation. But patterns without the r
 
 ---
 
+## Review Questions
+
+1. The chapter frames agentic engineering as "delegation, not automation." Compare these two approaches to the same problem: (A) Hardcoding a 15-step procedure for data cleanup, vs. (B) Giving an agent a data quality goal, cleanup tools, and validation rules, and letting it decide the sequence. For which approach is unit testing more relevant? For which is behavior verification more relevant? Why?
+
+2. Trust calibration depends on Stakes, Reliability, and Reversibility. For each of these system scenarios, determine the appropriate trust level (full supervision, guided autonomy, high autonomy, or full autonomy) and justify your choice: (A) An agent that summarizes daily news articles for internal distribution, (B) An agent that generates and sends customer invoices, (C) An agent that proposes changes to the production database schema. For each, identify which factor (stakes, reliability, reversibility) is the limiting constraint.
+
+3. The chapter contrasts debugging traditional code (stepping through execution to find the line that failed) versus debugging agents (finding the decision that went wrong). What is the practical difference? Why can't you use a traditional debugger to step through an agent's reasoning? What observability tools would you need instead?
+
+4. The Agent-Computer Interface (ACI) principle says clarity in tool design reduces errors and builds trust. Critique this tool interface: `def execute_code(code: str) -> str`. What is underspecified? How might an agent misuse it? Design a clearer interface and explain why it's less likely to cause errors.
+
+5. Graceful failure is presented as a feature, not a bug. Design a scenario where an agent's failure could be made graceful (recoverable, visible, non-cascading). What does graceful mean in this context? How would you monitor whether the agent is failing gracefully vs. silently failing?
+
+---
+
 ## Sources
 
 - Anthropic. "Building Effective Agents." *Anthropic Engineering*, December 2024. <https://www.anthropic.com/engineering/building-effective-agents>. Accessed April 2026.
