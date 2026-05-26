@@ -44,15 +44,16 @@ Whether you're building a workflow or an agent, the foundational unit is the sam
 
 **Memory.** The model can maintain state across interactions — remembering what happened earlier in a conversation, what a user prefers, what strategies worked on previous tasks. Without memory, every interaction starts from zero.
 
+<div style="text-align:center;">
+
+```mermaid
+flowchart LR
+    M[Memory] --> L[LLM]
+    R[Retrieval] --> L
+    T[Tools] --> L
 ```
-                    ┌─────────────┐
-                    │  Retrieval  │
-                    └──────┬──────┘
-                           │
-┌──────────┐        ┌──────▼──────┐        ┌──────────┐
-│  Memory  ├────────►     LLM     ◄────────┤  Tools   │
-└──────────┘        └─────────────┘        └──────────┘
-```
+
+</div>
 
 This augmented LLM is the atom from which all agentic systems are composed. Every pattern in this book — from prompt chaining to multi-agent orchestration — is a different way of arranging and connecting these atoms.
 
@@ -67,19 +68,15 @@ At its simplest, an agent is an LLM running in a loop. The loop follows a consis
 3. **Act.** The agent executes an action — calling a tool, generating output, requesting more information.
 4. **Evaluate.** The result of the action becomes a new observation, and the loop continues.
 
+<div style="text-align:center;">
+
+```mermaid
+flowchart LR
+    A[Observe] --> B[Think] --> C[Act] --> D[Evaluate]
+    D -->|new observation| A
 ```
-    ┌──────────┐
-    │ Observe  │◄──────────────────────┐
-    └────┬─────┘                       │
-         │                             │
-    ┌────▼─────┐                       │
-    │  Think   │                  ┌────┴─────┐
-    └────┬─────┘                  │ Evaluate │
-         │                        └────▲─────┘
-    ┌────▼─────┐                       │
-    │   Act    ├───────────────────────┘
-    └──────────┘
-```
+
+</div>
 
 The loop terminates when the agent determines the task is complete, when it encounters a stopping condition set by the developer (maximum iterations, time limit, cost budget), or when it decides to escalate to a human.
 
