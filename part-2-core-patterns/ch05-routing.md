@@ -8,14 +8,44 @@ Routing fixes this. You add a classification step at the front that examines eac
 
 The architecture is a classifier followed by branching paths:
 
-```
-                     ┌─→ [Handler A] → Response
-                     │
-Input → [Classifier] ├─→ [Handler B] → Response
-                     │
-                     ├─→ [Handler C] → Response
-                     │
-                     └─→ [Fallback]  → Response
+```mermaid
+flowchart TD
+    %% Define external inputs
+    Input(["User Input / Message"]) --> Classifier
+
+    %% The Routing Layer
+    subgraph RoutingLayer[Triage / Routing Layer]
+        Classifier{"Classifier / Receptionist\n(Fast LLM or Rules)"}
+    end
+
+    %% The Specialized Handlers
+    subgraph Handlers[Specialized Handlers]
+        HandlerA["Handler A\n(Billing Inquiry)"]
+        HandlerB["Handler B\n(Tech Troubleshooting)"]
+        HandlerC["Handler C\n(Human Escalation)"]
+        Fallback["Fallback Handler\n(General FAQs)"]
+    end
+
+    %% Routing logic based on intent
+    Classifier -- "Billing Intent" --> HandlerA
+    Classifier -- "Tech Issue" --> HandlerB
+    Classifier -- "Urgent / Angry" --> HandlerC
+    Classifier -- "Unknown / Simple" --> Fallback
+
+    %% Output
+    HandlerA --> Response(["Final Response"])
+    HandlerB --> Response
+    HandlerC --> Response
+    Fallback --> Response
+
+    %% Styling
+    classDef router fill:#fef08a,stroke:#ca8a04,stroke-width:2px,color:#000
+    classDef handler fill:#eef2ff,stroke:#6366f1,stroke-width:2px,color:#000
+    classDef io fill:#f1f5f9,stroke:#64748b,stroke-width:2px,color:#000
+    
+    class Classifier router
+    class HandlerA,HandlerB,HandlerC,Fallback handler
+    class Input,Response io
 ```
 
 The classifier examines the input and assigns it to a category. Each category maps to a specialized downstream handler. The handlers may differ in their system prompts, their available tools, their model choice, or even their processing pipeline (one category might trigger a prompt chain, another a single call).
