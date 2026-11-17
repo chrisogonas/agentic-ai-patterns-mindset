@@ -1,3 +1,23 @@
+"""Prompt chaining example: analyze a document in validated LLM steps.
+
+Setup from the repository root (PowerShell)::
+
+    python -m pip install openai
+    $env:OPENAI_API_KEY = "<your OpenAI API key>"
+
+This module exposes ``content_analysis_chain`` rather than a command-line
+entry point. To run it from the repository root::
+
+    from runpy import run_path
+
+    chain = run_path("code/ch04/prompt-chaining.py")["content_analysis_chain"]
+    result = chain("Paste a document to analyze here.")
+    print(result["summary"])
+
+The chain makes three OpenAI API calls and may incur charges. It returns a
+dictionary containing ``themes``, ``analysis``, and ``summary``.
+"""
+
 import json
 import re
 from openai import OpenAI
@@ -5,7 +25,15 @@ from openai import OpenAI
 client = OpenAI()
 
 def call_llm(prompt: str, system: str = "") -> str:
-    """Single LLM call with a focused prompt."""
+    """Send one focused prompt to the configured OpenAI chat model.
+
+    Args:
+        prompt: User-task text for this step in the chain.
+        system: Optional system instruction.
+
+    Returns:
+        The assistant's text response.
+    """
     messages = []
     if system:
         messages.append({"role": "system", "content": system})
@@ -21,7 +49,17 @@ def call_llm(prompt: str, system: str = "") -> str:
 
 
 def parse_json_response(result: str):
-    """Parse a model response as JSON, allowing for surrounding text."""
+    """Parse JSON from a model response, allowing surrounding prose or fences.
+
+    Args:
+        result: Raw text returned by the model.
+
+    Returns:
+        The decoded JSON value.
+
+    Raises:
+        ValueError: If no valid JSON value can be extracted.
+    """
     try:
         return json.loads(result)
     except json.JSONDecodeError:
@@ -132,7 +170,20 @@ def generate_summary(analysis: dict) -> str:
 # Three functions, three LLM calls, each with a single clear job. Now we wire them together with gates:
 
 def content_analysis_chain(document: str) -> dict:
-    """Full prompt chain with validation gates."""
+    """Extract themes, analyze them, and produce a validated summary.
+
+    Args:
+        document: Source text to analyze. It should be long enough to contain
+            multiple themes and supporting quotations.
+
+    Returns:
+        A dictionary with ``themes`` (list of strings), ``analysis`` (mapping
+        of themes to analysis and quotes), and ``summary`` (text).
+
+    Raises:
+        ValueError: If a model response has invalid JSON, omits required fields,
+            or produces a summary shorter than 100 words.
+    """
     
     # Step 1: Extract themes
     themes = extract_themes(document)

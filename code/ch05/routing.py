@@ -1,3 +1,26 @@
+"""Content- and model-based routing examples for customer service requests.
+
+Setup from the repository root (PowerShell)::
+
+    python -m pip install openai
+    $env:OPENAI_API_KEY = "<your OpenAI API key>"
+    python code/ch05/routing.py
+
+The script sends its sample message through ``customer_service_router``. To
+call a different entry point from your own script, run from ``code/ch05`` and
+import it as follows::
+
+    from routing import confident_router, model_routed_response
+
+    print(confident_router("I was billed twice this month."))
+    print(model_routed_response("Compare these two database designs."))
+
+Each routed response may make multiple OpenAI API calls and incur charges.
+``customer_service_router`` returns a dictionary with ``category`` and
+``response``. The search, account, and support actions are illustrative; this
+example does not connect to real customer records or a human-review queue.
+"""
+
 from __future__ import annotations
 
 import os
@@ -93,7 +116,15 @@ def handle_request(message: str, category: Category) -> str:
 
 
 def customer_service_router(message: str) -> dict[str, Any]:
-    """Run the full content-based routing pipeline."""
+    """Classify a customer message and send it to the matching handler.
+
+    Args:
+        message: Customer request to classify and answer.
+
+    Returns:
+        A dictionary containing the selected category and response text.
+        Escalation-category requests return a fixed human-review notice.
+    """
     category = classify_request(message)
     response = handle_request(message, category)
     return {"category": category.value, "response": response}
@@ -114,7 +145,15 @@ def classify_with_confidence(message: str) -> RoutingDecision:
 
 
 def confident_router(message: str) -> dict[str, Any]:
-    """Route with a confidence threshold so low-confidence requests fall back safely."""
+    """Route using a confidence score, falling back to the general handler.
+
+    Args:
+        message: Customer request to classify and answer.
+
+    Returns:
+        A dictionary containing the selected category and response text. A
+        confidence below 0.7 uses the general handler.
+    """
     decision = classify_with_confidence(message)
     if decision.confidence < 0.7:
         return {"category": Category.GENERAL.value, "response": handle_request(message, Category.GENERAL)}
@@ -147,7 +186,14 @@ Respond with ONLY the difficulty level.""",
 
 
 def model_routed_response(query: str) -> str:
-    """Route the response generation to a model tier based on the query difficulty."""
+    """Choose a model tier based on query difficulty and generate a response.
+
+    Args:
+        query: Question or task whose difficulty determines the model.
+
+    Returns:
+        The selected model's response text.
+    """
     difficulty = assess_difficulty(query)
     model = MODEL_MAP[difficulty]
     response = client.chat.completions.create(
